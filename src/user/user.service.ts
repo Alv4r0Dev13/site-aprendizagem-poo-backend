@@ -4,13 +4,14 @@ import { User } from './user.schema';
 import { Model } from 'mongoose';
 import { SignInDTO } from './dto/signIn.dto';
 import { EditUserDTO } from './dto/editUser.dto';
+import { BCrypt } from 'src/utils/security/bcrypt';
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   create(data: SignInDTO) {
-    const newUser = new this.userModel(data);
+    const newUser = new this.userModel(BCrypt.encryptPassword(data));
     return newUser.save();
   }
 

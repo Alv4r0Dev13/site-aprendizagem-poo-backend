@@ -7,11 +7,13 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { SignInDTO } from './dto/signIn.dto';
 import { EditUserDTO } from './dto/editUser.dto';
 import { isValidId } from 'src/utils/middlewares/isValidId';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @Controller('users')
 export class UserController {
@@ -23,11 +25,13 @@ export class UserController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async find() {
     return await this.userService.find();
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async findById(@Param('id') id: string) {
     if (!isValidId(id)) throw new HttpException('Invalid ID', 400);
     const user = await this.userService.findById(id);
@@ -36,6 +40,7 @@ export class UserController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   async update(@Param('id') id: string, @Body() editUserDTO: EditUserDTO) {
     if (!isValidId(id)) throw new HttpException('Invalid ID', 400);
     const user = await this.userService.update(id, editUserDTO);
@@ -44,6 +49,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async delete(@Param('id') id: string) {
     if (!isValidId(id)) throw new HttpException('Invalid ID', 400);
     const user = await this.userService.delete(id);
