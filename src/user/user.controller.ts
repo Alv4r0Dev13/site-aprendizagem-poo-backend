@@ -8,29 +8,29 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UserService } from './user.service';
 import { SignInDTO } from './dto/signIn.dto';
 import { EditUserDTO } from './dto/editUser.dto';
 import { isValidId } from 'src/utils/middlewares/isValidId';
 
 @Controller('users')
-export class UsersController {
-  constructor(private usersService: UsersService) {}
+export class UserController {
+  constructor(private userService: UserService) {}
 
   @Post()
-  create(@Body() signInDTO: SignInDTO) {
-    return this.usersService.create(signInDTO);
+  async create(@Body() signInDTO: SignInDTO) {
+    return this.userService.create(signInDTO);
   }
 
   @Get()
-  find() {
-    return this.usersService.find();
+  async find() {
+    return await this.userService.find();
   }
 
   @Get(':id')
   async findById(@Param('id') id: string) {
     if (!isValidId(id)) throw new HttpException('Invalid ID', 400);
-    const user = await this.usersService.findById(id);
+    const user = await this.userService.findById(id);
     if (!user) throw new HttpException('User not found', 404);
     return user;
   }
@@ -38,7 +38,7 @@ export class UsersController {
   @Patch(':id')
   async update(@Param('id') id: string, @Body() editUserDTO: EditUserDTO) {
     if (!isValidId(id)) throw new HttpException('Invalid ID', 400);
-    const user = await this.usersService.update(id, editUserDTO);
+    const user = await this.userService.update(id, editUserDTO);
     if (!user) throw new HttpException('User not found', 404);
     return user;
   }
@@ -46,7 +46,7 @@ export class UsersController {
   @Delete(':id')
   async delete(@Param('id') id: string) {
     if (!isValidId(id)) throw new HttpException('Invalid ID', 400);
-    const user = await this.usersService.delete(id);
+    const user = await this.userService.delete(id);
     if (!user) throw new HttpException('User not found', 404);
     return user;
   }
