@@ -12,7 +12,7 @@ import {
 import { UserService } from './user.service';
 import { SignInDTO } from './dto/signIn.dto';
 import { EditUserDTO } from './dto/editUser.dto';
-import { isValidId } from 'src/utils/middlewares/isValidId';
+import { isValidId } from 'src/utils/functions/isValidId.function';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @Controller('users')

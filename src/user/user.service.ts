@@ -1,18 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './user.schema';
-import { Model } from 'mongoose';
+import { Document, Model, Types } from 'mongoose';
 import { SignInDTO } from './dto/signIn.dto';
 import { EditUserDTO } from './dto/editUser.dto';
 import { BCrypt } from 'src/utils/security/bcrypt';
+import { ResponseUser } from 'src/utils/types';
+import filterData from 'src/utils/functions/filterData.function';
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-  create(data: SignInDTO) {
+  async create(data: SignInDTO) {
     const newUser = new this.userModel(BCrypt.encryptPassword(data));
-    return newUser.save();
+    const user = await newUser.save();
+    return this.getUserData(user);
   }
 
   async find() {
@@ -35,5 +38,25 @@ export class UserService {
 
   async delete(id: string) {
     return await this.userModel.findByIdAndDelete(id).exec();
+  }
+
+  private getUserData(
+    data: Document<unknown, {}, User> &
+      User & { _id: Types.ObjectId } & { __v: number },
+    exclude?: (keyof Omit<User, 'password'>)[],
+  ): ResponseUser;
+  private getUserData(
+    data: (Document<unknown, {}, User> &
+      User & { _id: Types.ObjectId } & { __v: number })[],
+    exclude?: (keyof Omit<User, 'password'>)[],
+  ): ResponseUser[];
+  private getUserData(
+    data: any,
+    exclude?: (keyof Omit<User, 'password'>)[],
+  ): any {
+    return filterData(
+      data,
+      exclude && exclude.length ? ['password', ...exclude] : ['password'],
+    );
   }
 }
