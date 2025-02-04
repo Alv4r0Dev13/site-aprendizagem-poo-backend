@@ -5,9 +5,14 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthConfig } from './utils/security/Auth.config';
 import { AuthGuard } from './utils/security/Auth.guard';
 import { UserTypeGuard } from './utils/security/UserType.guard';
+import { CourseModule } from './course/course.module';
 
 @Module({
-  imports: [MongooseModule.forRoot(process.env.MONGO_URL), UserModule],
+  imports: [
+    MongooseModule.forRoot(process.env.MONGO_URL),
+    UserModule,
+    CourseModule,
+  ],
   controllers: [],
   providers: [
     AuthConfig,
