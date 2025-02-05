@@ -24,10 +24,10 @@ export class UserController {
   @Post()
   @Public()
   async create(@Body() signInDTO: SignInDTO) {
-    const stored = this.userService.findByEmail(signInDTO.email);
+    const stored = await this.userService.findByEmail(signInDTO.email);
     if (stored)
       throw new HttpException('Usuário já cadastrado.', HttpStatus.BAD_REQUEST);
-    const duplicate = this.userService.findByUsername(signInDTO.username);
+    const duplicate = await this.userService.findByUsername(signInDTO.username);
     if (duplicate)
       throw new HttpException(
         'Já existe um usuário com esse nome.',

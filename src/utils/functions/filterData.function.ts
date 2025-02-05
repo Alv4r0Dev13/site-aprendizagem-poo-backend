@@ -23,7 +23,7 @@ function filterData<T, R extends APIResponse<T> = APIResponse<T>>(
   exclude?: (keyof T)[],
 ): R[];
 
-// Function overload object array
+// Function implementation
 function filterData<T, R extends APIResponse<T> = APIResponse<T>>(
   data: any,
   exclude?: (keyof T)[],
