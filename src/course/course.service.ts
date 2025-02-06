@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Course } from './course.schema';
 import { Model } from 'mongoose';
 import filterData from 'src/utils/functions/filterData.function';
+import { CourseType } from 'src/utils/enum/CourseType.enum';
 
 @Injectable()
 export class CourseService {
@@ -19,6 +20,11 @@ export class CourseService {
 
   async findAll() {
     const courses = await this.courseModel.find().exec();
+    return filterData(courses);
+  }
+
+  async findByType(type: CourseType) {
+    const courses = await this.courseModel.find({ type }).exec();
     return filterData(courses);
   }
 

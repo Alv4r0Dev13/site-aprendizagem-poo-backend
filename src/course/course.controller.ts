@@ -15,6 +15,7 @@ import { UpdateCourseDto } from './dto/update-course.dto';
 import { isValidId } from 'src/utils/functions/isValidId.function';
 import { Accept, Public } from 'src/utils/security/Auth.decorator';
 import { UserType } from 'src/utils/enum/UserType.enum';
+import { CourseType } from 'src/utils/enum/CourseType.enum';
 
 @Controller('course')
 export class CourseController {
@@ -30,6 +31,12 @@ export class CourseController {
   @Get()
   findAll() {
     return this.courseService.findAll();
+  }
+
+  @Public()
+  @Get('/type/:type')
+  findByType(@Param('type') type: CourseType) {
+    return this.courseService.findByType(type);
   }
 
   @Public()
