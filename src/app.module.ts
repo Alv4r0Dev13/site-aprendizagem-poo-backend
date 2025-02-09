@@ -6,12 +6,14 @@ import { AuthConfig } from './utils/security/Auth.config';
 import { AuthGuard } from './utils/security/Auth.guard';
 import { UserTypeGuard } from './utils/security/UserType.guard';
 import { CourseModule } from './course/course.module';
+import { ArticleModule } from './article/article.module';
 
 @Module({
   imports: [
     MongooseModule.forRoot(process.env.MONGO_URL),
     UserModule,
     CourseModule,
+    ArticleModule,
   ],
   controllers: [],
   providers: [
