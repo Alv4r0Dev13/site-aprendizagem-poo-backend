@@ -1,4 +1,9 @@
-import { ArrayNotEmpty, IsNotEmpty, IsString } from 'class-validator';
+import {
+  ArrayNotEmpty,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateBlogArticleDTO {
   @IsString()
@@ -17,4 +22,8 @@ export class CreateBlogArticleDTO {
   @ArrayNotEmpty()
   @IsNotEmpty()
   tags: string[];
+
+  @IsString()
+  @IsOptional()
+  thumbnail?: string;
 }

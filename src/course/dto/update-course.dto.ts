@@ -1,12 +1,20 @@
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import { CourseType } from 'src/utils/enum/CourseType.enum';
 
 export class UpdateCourseDto {
-  @IsOptional()
   @IsString()
+  @IsOptional()
   name?: string;
 
-  @IsOptional()
   @IsEnum(CourseType)
+  @IsOptional()
   type?: CourseType;
+
+  @IsNumber()
+  @IsOptional()
+  classes?: number;
+
+  @IsString()
+  @IsOptional()
+  thumbnail?: string;
 }

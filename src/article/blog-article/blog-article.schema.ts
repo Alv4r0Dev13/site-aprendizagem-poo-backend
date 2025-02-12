@@ -9,6 +9,8 @@ export class BlogArticle extends OmitType(Article, ['type'] as const) {
   authorId: Types.ObjectId;
   @Prop({ required: true })
   tags: string[];
+  @Prop({ required: false })
+  thumbnail?: string;
 }
 
 export const BlogArticleSchema = SchemaFactory.createForClass(BlogArticle);

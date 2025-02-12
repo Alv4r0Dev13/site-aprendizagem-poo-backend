@@ -1,12 +1,16 @@
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { CourseType } from 'src/utils/enum/CourseType.enum';
 
 export class CreateCourseDto {
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   name: string;
 
-  @IsNotEmpty()
   @IsEnum(CourseType)
+  @IsNotEmpty()
   type: CourseType;
+
+  @IsString()
+  @IsOptional()
+  thumbnail?: string;
 }

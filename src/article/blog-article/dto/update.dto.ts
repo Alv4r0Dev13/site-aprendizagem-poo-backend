@@ -13,4 +13,8 @@ export class UpdateBlogArticleDTO {
   @ArrayNotEmpty()
   @IsOptional()
   tags?: string[];
+
+  @IsString()
+  @IsOptional()
+  thumbnail?: string;
 }

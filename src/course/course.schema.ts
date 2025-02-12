@@ -7,6 +7,10 @@ export class Course {
   name: string;
   @Prop({ required: true, enum: CourseType })
   type: CourseType;
+  @Prop({ required: false })
+  thumbnail?: string;
+  @Prop({ default: 0 })
+  classes: number;
   @Prop()
   createdAt: Date;
   @Prop()
