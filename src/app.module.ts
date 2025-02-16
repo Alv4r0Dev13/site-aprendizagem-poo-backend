@@ -7,6 +7,7 @@ import { AuthGuard } from './utils/security/Auth.guard';
 import { UserTypeGuard } from './utils/security/UserType.guard';
 import { CourseModule } from './course/course.module';
 import { ArticleModule } from './article/article.module';
+import { ImageModule } from './image/image.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ArticleModule } from './article/article.module';
     UserModule,
     CourseModule,
     ArticleModule,
+    ImageModule,
   ],
   controllers: [],
   providers: [
