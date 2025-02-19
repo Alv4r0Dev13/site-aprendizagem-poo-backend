@@ -5,6 +5,8 @@ import { CourseType } from 'src/utils/enum/CourseType.enum';
 export class Course {
   @Prop({ required: true })
   name: string;
+  @Prop({ required: true })
+  description: string;
   @Prop({ required: true, enum: CourseType })
   type: CourseType;
   @Prop({ required: false })

@@ -6,6 +6,10 @@ export class UpdateCourseDto {
   @IsOptional()
   name?: string;
 
+  @IsString()
+  @IsOptional()
+  description?: string;
+
   @IsEnum(CourseType)
   @IsOptional()
   type?: CourseType;

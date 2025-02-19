@@ -6,6 +6,10 @@ export class CreateCourseDto {
   @IsNotEmpty()
   name: string;
 
+  @IsString()
+  @IsNotEmpty()
+  description: string;
+
   @IsEnum(CourseType)
   @IsNotEmpty()
   type: CourseType;
