@@ -31,14 +31,15 @@ function filterData<T, R extends APIResponse<T> = APIResponse<T>>(
   if (!data) return null;
   if (Array.isArray(data)) {
     if (!data.length) return [];
-    return data.map(d => {
-      const { _id: id, __v, ...rest } = d._doc;
-      if (exclude && exclude.length) exclude.forEach(k => delete rest[k]);
-      return { id, ...rest };
-    });
+    return data.map(d => filterData(d, exclude));
   }
   const { _id: id, __v, ...rest } = data._doc;
   if (exclude && exclude.length) exclude.forEach(k => delete rest[k]);
+  for (const k in rest)
+    if (rest[k]?._id && !(rest[k] instanceof Types.ObjectId)) {
+      const { _id: id, ...nRest } = rest[k]._doc;
+      rest[k] = { id, ...nRest };
+    }
   return { id, ...rest };
 }
 

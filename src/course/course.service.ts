@@ -5,7 +5,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Course } from './course.schema';
 import { Model } from 'mongoose';
 import filterData from 'src/utils/functions/filterData.function';
-import { CourseType } from 'src/utils/enum/CourseType.enum';
 
 @Injectable()
 export class CourseService {
@@ -19,15 +18,19 @@ export class CourseService {
   }
 
   async findAll(limit?: number) {
-    const courses = await this.courseModel.find(null, null, { limit }).exec();
+    const courses = await this.courseModel
+      .find(null, null, { limit })
+      .populate('author', '_id username')
+      .exec();
     return filterData(courses);
   }
 
   async findByType(type: string, negate?: boolean, limit?: number) {
     const filter = { type: negate ? { $ne: type } : type };
-    let query = this.courseModel.find(filter, undefined, { limit });
-    if (limit) query = query.limit(limit);
-    const courses = await query.exec();
+    const courses = await this.courseModel
+      .find(filter, null, { limit })
+      .populate({ path: 'author', select: '_id username' })
+      .exec();
     return filterData(courses);
   }
 
