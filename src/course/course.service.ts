@@ -18,13 +18,16 @@ export class CourseService {
     return filterData(course);
   }
 
-  async findAll() {
-    const courses = await this.courseModel.find().exec();
+  async findAll(limit?: number) {
+    const courses = await this.courseModel.find(null, null, { limit }).exec();
     return filterData(courses);
   }
 
-  async findByType(type: CourseType) {
-    const courses = await this.courseModel.find({ type }).exec();
+  async findByType(type: string, negate?: boolean, limit?: number) {
+    const filter = { type: negate ? { $ne: type } : type };
+    let query = this.courseModel.find(filter, undefined, { limit });
+    if (limit) query = query.limit(limit);
+    const courses = await query.exec();
     return filterData(courses);
   }
 

@@ -8,6 +8,7 @@ import {
   Delete,
   HttpException,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -16,6 +17,7 @@ import { isValidId } from 'src/utils/functions/isValidId.function';
 import { Accept, Public } from 'src/utils/security/Auth.decorator';
 import { UserType } from 'src/utils/enum/UserType.enum';
 import { CourseType } from 'src/utils/enum/CourseType.enum';
+import { isEnum } from 'class-validator';
 
 @Controller('course')
 export class CourseController {
@@ -29,14 +31,24 @@ export class CourseController {
 
   @Public()
   @Get()
-  findAll() {
-    return this.courseService.findAll();
+  findAll(@Query('limit') limit: number) {
+    return this.courseService.findAll(limit);
   }
 
   @Public()
   @Get('/type/:type')
-  findByType(@Param('type') type: CourseType) {
-    return this.courseService.findByType(type);
+  findByType(@Param('type') type: string, @Query('limit') limit: number) {
+    let negate = false;
+    if (type.startsWith('!')) {
+      negate = true;
+      type = type.replace('!', '');
+    }
+    if (!isEnum(type, CourseType))
+      throw new HttpException(
+        'Tipo de curso inválido.',
+        HttpStatus.BAD_REQUEST,
+      );
+    return this.courseService.findByType(type, negate, limit);
   }
 
   @Public()
