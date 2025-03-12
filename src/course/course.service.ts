@@ -29,13 +29,16 @@ export class CourseService {
     const filter = { type: negate ? { $ne: type } : type };
     const courses = await this.courseModel
       .find(filter, null, { limit })
-      .populate({ path: 'author', select: '_id username' })
+      .populate({ path: 'author', select: '_id username type avatarUrl' })
       .exec();
     return filterData(courses);
   }
 
   async findById(id: string) {
-    const course = await this.courseModel.findById(id).exec();
+    const course = await this.courseModel
+      .findById(id)
+      .populate({ path: 'author', select: '_id username type avatarUrl' })
+      .exec();
     return filterData(course);
   }
 
