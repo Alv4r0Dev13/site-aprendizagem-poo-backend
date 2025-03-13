@@ -8,6 +8,7 @@ import { UserTypeGuard } from './utils/security/UserType.guard';
 import { CourseModule } from './course/course.module';
 import { ArticleModule } from './article/article.module';
 import { ImageModule } from './image/image.module';
+import { QuestionModule } from './question/question.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ImageModule } from './image/image.module';
     CourseModule,
     ArticleModule,
     ImageModule,
+    QuestionModule,
   ],
   controllers: [],
   providers: [
