@@ -11,8 +11,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { CourseService } from './course.service';
-import { CreateCourseDto } from './dto/create-course.dto';
-import { UpdateCourseDto } from './dto/update-course.dto';
+import { CreateCourseDTO } from './dto/create-course.dto';
+import { UpdateCourseDTO } from './dto/update-course.dto';
 import { isValidId } from 'src/utils/functions/isValidId.function';
 import { Accept, Public } from 'src/utils/security/Auth.decorator';
 import { UserType } from 'src/utils/enum/UserType.enum';
@@ -25,8 +25,8 @@ export class CourseController {
 
   @Accept(UserType.ADMIN)
   @Post()
-  create(@Body() createCourseDto: CreateCourseDto) {
-    return this.courseService.create(createCourseDto);
+  create(@Body() createCourseDTO: CreateCourseDTO) {
+    return this.courseService.create(createCourseDTO);
   }
 
   @Public()
@@ -61,10 +61,10 @@ export class CourseController {
 
   @Accept(UserType.ADMIN)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
+  update(@Param('id') id: string, @Body() updateCourseDTO: UpdateCourseDTO) {
     if (!isValidId(id))
       throw new HttpException('Id inválido.', HttpStatus.BAD_REQUEST);
-    return this.courseService.update(id, updateCourseDto);
+    return this.courseService.update(id, updateCourseDTO);
   }
 
   @Accept(UserType.ADMIN)

@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 import filterData from 'src/utils/functions/filterData.function';
 import { LikeQuestionDTO } from './dto/like-question.dto';
 
-const populateAuthorQuery = '_id username userType avatarUrl';
+const populateAuthorQuery = '_id username type avatarUrl';
 
 @Injectable()
 export class QuestionService {
@@ -15,8 +15,8 @@ export class QuestionService {
     @InjectModel(Question.name) private readonly questionModel: Model<Question>,
   ) {}
 
-  async create(createQuestionDto: CreateQuestionDTO) {
-    const question = await this.questionModel.create(createQuestionDto);
+  async create(createQuestionDTO: CreateQuestionDTO) {
+    const question = await this.questionModel.create(createQuestionDTO);
     return filterData(question);
   }
 
@@ -48,9 +48,9 @@ export class QuestionService {
     return await this.questionModel.findByIdAndUpdate(id, query).exec();
   }
 
-  async update(id: string, updateQuestionDto: UpdateQuestionDTO) {
+  async update(id: string, updateQuestionDTO: UpdateQuestionDTO) {
     const question = await this.questionModel
-      .findByIdAndUpdate(id, updateQuestionDto, { new: true })
+      .findByIdAndUpdate(id, updateQuestionDTO, { new: true })
       .populate('author', populateAuthorQuery)
       .exec();
     return filterData(question);

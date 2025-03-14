@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCourseDto } from './dto/create-course.dto';
-import { UpdateCourseDto } from './dto/update-course.dto';
+import { CreateCourseDTO } from './dto/create-course.dto';
+import { UpdateCourseDTO } from './dto/update-course.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Course } from './course.schema';
 import { Model } from 'mongoose';
@@ -12,7 +12,7 @@ export class CourseService {
     @InjectModel(Course.name) private readonly courseModel: Model<Course>,
   ) {}
 
-  async create(data: CreateCourseDto) {
+  async create(data: CreateCourseDTO) {
     const course = await this.courseModel.create(data);
     return filterData(course);
   }
@@ -42,7 +42,7 @@ export class CourseService {
     return filterData(course);
   }
 
-  async update(id: string, data: UpdateCourseDto) {
+  async update(id: string, data: UpdateCourseDTO) {
     const course = await this.courseModel
       .findByIdAndUpdate(id, data, { new: true })
       .exec();
