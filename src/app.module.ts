@@ -9,6 +9,7 @@ import { CourseModule } from './course/course.module';
 import { ArticleModule } from './article/article.module';
 import { ImageModule } from './image/image.module';
 import { QuestionModule } from './question/question.module';
+import { AnswerModule } from './answer/answer.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { QuestionModule } from './question/question.module';
     ArticleModule,
     ImageModule,
     QuestionModule,
+    AnswerModule,
   ],
   controllers: [],
   providers: [
