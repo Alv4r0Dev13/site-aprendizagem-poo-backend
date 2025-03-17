@@ -9,7 +9,11 @@ export class UpdateCourseArticleDTO {
   @IsOptional()
   content?: string;
 
+  @IsString()
+  @IsOptional()
+  module?: string;
+
   @IsNumber()
   @IsOptional()
-  order?: number;
+  number?: number;
 }

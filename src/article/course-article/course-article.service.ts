@@ -36,7 +36,12 @@ export class CourseArticleService {
 
   async findByCourse(course: string) {
     const articles = await this.courseArticleModel.find({ course }).exec();
-    return this.getArticleData(articles);
+    return this.getArticleData(articles, ['content']);
+  }
+
+  async findByModule(module: string) {
+    const articles = await this.courseArticleModel.find({ module }).exec();
+    return this.getArticleData(articles, ['content']);
   }
 
   async findByNumber(course: string, number: number) {

@@ -13,9 +13,11 @@ import {
 } from './blog-article/blog-article.schema';
 import { BlogArticleController } from './blog-article/blog-article.controller';
 import { BlogArticleService } from './blog-article/blog-article.service';
+import { CourseModule } from 'src/course/course.module';
 
 @Module({
   imports: [
+    CourseModule,
     MongooseModule.forFeature([
       {
         name: Article.name,

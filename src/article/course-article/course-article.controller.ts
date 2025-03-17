@@ -14,15 +14,22 @@ import { CreateCourseArticleDTO } from './dto/create.dto';
 import { isValidId } from '../../utils/functions/isValidId.function';
 import { UpdateCourseArticleDTO } from './dto/update.dto';
 import { Public } from '../../utils/security/Auth.decorator';
+import { CourseService } from 'src/course/course.service';
 
 @Controller('article/course')
 export class CourseArticleController {
-  constructor(private readonly courseArticleService: CourseArticleService) {}
+  constructor(
+    private readonly courseArticleService: CourseArticleService,
+    private readonly courseService: CourseService,
+  ) {}
 
   @Post()
   async createBlogArticle(@Body() createArticleDTO: CreateCourseArticleDTO) {
     if (!isValidId(createArticleDTO.course))
-      throw new HttpException('ID do autor inválido.', HttpStatus.BAD_REQUEST);
+      throw new HttpException('ID do curso inválido.', HttpStatus.BAD_REQUEST);
+    const course = await this.courseService.findById(createArticleDTO.course);
+    if (!course)
+      throw new HttpException('Curso não encontrado', HttpStatus.BAD_REQUEST);
     const stored = await this.courseArticleService.findByNumber(
       createArticleDTO.course,
       createArticleDTO.number,
@@ -32,7 +39,14 @@ export class CourseArticleController {
         'Já existe uma aula na ordem indicada.',
         HttpStatus.BAD_REQUEST,
       );
-    return await this.courseArticleService.create(createArticleDTO);
+    const article = await this.courseArticleService.create(createArticleDTO);
+    if (article)
+      await this.courseService.updateClasses(
+        createArticleDTO.course,
+        1,
+        article.module,
+      );
+    return article;
   }
 
   @Public()
@@ -98,10 +112,16 @@ export class CourseArticleController {
   @Delete(':id')
   async delete(@Param('id') id: string) {
     if (!isValidId(id))
-      throw new HttpException('ID do autor inválido.', HttpStatus.BAD_REQUEST);
+      throw new HttpException('ID inválido.', HttpStatus.BAD_REQUEST);
     const article = await this.courseArticleService.remove(id);
     if (!article)
       throw new HttpException('Artigo não encontrado.', HttpStatus.NOT_FOUND);
+    const stored = await this.courseArticleService.findByModule(article.module);
+    await this.courseService.updateClasses(
+      article.course.toString(),
+      -1,
+      !stored.length ? article.module : undefined,
+    );
     return article;
   }
 }

@@ -49,6 +49,21 @@ export class CourseService {
     return filterData(course);
   }
 
+  async updateClasses(id: string, add: number, module?: string) {
+    const query =
+      module && add > 0 ? { _id: id, modules: { $ne: module } } : id;
+    const update = { $inc: { classes: add } };
+    if (module) {
+      if (add > 0) update['$push'] = { modules: module };
+      else update['$pull'] = { modules: module };
+    }
+    console.log(update);
+    const course = await this.courseModel
+      .findByIdAndUpdate(query, update, { new: true })
+      .exec();
+    return filterData(course);
+  }
+
   async remove(id: string) {
     const course = await this.courseModel.findByIdAndDelete(id).exec();
     return filterData(course);

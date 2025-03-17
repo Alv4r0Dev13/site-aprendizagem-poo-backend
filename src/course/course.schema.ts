@@ -15,6 +15,8 @@ export class Course {
   type: CourseType;
   @Prop({ required: false })
   thumbnail?: string;
+  @Prop({ default: [] })
+  modules: string[];
   @Prop({ default: 0 })
   classes: number;
   @Prop()

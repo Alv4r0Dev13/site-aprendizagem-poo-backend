@@ -7,6 +7,8 @@ import { Types } from 'mongoose';
 export class CourseArticle extends OmitType(Article, ['type'] as const) {
   @Prop({ required: true })
   course: Types.ObjectId;
+  @Prop({ required: true })
+  module: string;
   @Prop({ required: true, min: 1 })
   number: number;
 }
