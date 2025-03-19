@@ -29,8 +29,8 @@ export class BlogArticleController {
 
   @Public()
   @Get()
-  async read(@Query('title') title?: string) {
-    return await this.blogArticleService.find(title);
+  async read(@Query('search') search?: string, @Query('limit') limit?: number) {
+    return await this.blogArticleService.find(search, limit);
   }
 
   @Public()

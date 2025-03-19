@@ -33,8 +33,8 @@ export class QuestionController {
 
   @Public()
   @Get()
-  find(@Query('limit') limit?: number) {
-    return this.questionService.find(limit);
+  find(@Query('search') search?: string, @Query('limit') limit?: number) {
+    return this.questionService.find(search, limit);
   }
 
   @Public()

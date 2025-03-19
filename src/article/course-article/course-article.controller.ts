@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CourseArticleService } from './course-article.service';
 import { CreateCourseArticleDTO } from './dto/create.dto';
@@ -51,12 +52,12 @@ export class CourseArticleController {
 
   @Public()
   @Get()
-  async readAll() {
-    return await this.courseArticleService.findAll();
+  async read(@Query('search') search?: string, @Query('limit') limit?: number) {
+    return await this.courseArticleService.find(search, limit);
   }
 
   @Public()
-  @Get('single/slug/:slug')
+  @Get('slug/:slug')
   async readBySlug(@Param('slug') slug: string) {
     const article = await this.courseArticleService.findBySlug(slug);
     if (!article)

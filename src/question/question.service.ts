@@ -20,12 +20,13 @@ export class QuestionService {
     return filterData(question);
   }
 
-  async find(limit?: number) {
+  async find(search?: string, limit?: number) {
+    const query = search ? { title: { $regex: search, $options: 'i' } } : null;
     const questions = await this.questionModel
-      .find(null, null, { limit })
+      .find(query, null, { limit })
       .populate('author', populateAuthorQuery)
       .exec();
-    return filterData(questions);
+    return filterData(questions, limit ? ['content'] : undefined);
   }
 
   async findByAuthor(author: string) {

@@ -19,9 +19,11 @@ export class BlogArticleService {
     return this.getArticleData(article);
   }
 
-  async find(title?: string) {
-    const query = title ? { title: new RegExp(title, 'gi') } : undefined;
-    const articles = await this.blogArticleModel.find(query).exec();
+  async find(search?: string, limit?: number) {
+    const query = search ? { title: { $regex: search, $options: 'i' } } : null;
+    const articles = await this.blogArticleModel
+      .find(query, null, { limit })
+      .exec();
     return this.getArticleData(articles, ['content']);
   }
 

@@ -19,8 +19,11 @@ export class CourseArticleService {
     return this.getArticleData(article);
   }
 
-  async findAll() {
-    const articles = await this.courseArticleModel.find().exec();
+  async find(search?: string, limit?: number) {
+    const query = search ? { title: { $regex: search, $options: 'i' } } : null;
+    const articles = await this.courseArticleModel
+      .find(null, null, { limit })
+      .exec();
     return this.getArticleData(articles, ['content']);
   }
 
