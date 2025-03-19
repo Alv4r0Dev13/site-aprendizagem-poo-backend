@@ -7,6 +7,8 @@ export class Question {
   @Prop({ required: true })
   title: string;
   @Prop({ required: true })
+  slug: string;
+  @Prop({ required: true })
   content: string;
   @Prop({ required: true, ref: User.name })
   author: Types.ObjectId;

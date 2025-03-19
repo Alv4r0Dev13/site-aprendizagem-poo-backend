@@ -33,6 +33,11 @@ export class QuestionService {
     return filterData(questions, ['author']);
   }
 
+  async findBySlug(slug: string) {
+    const question = await this.questionModel.findOne({ slug }).exec();
+    return filterData(question);
+  }
+
   async findById(id: string) {
     const questions = await this.questionModel
       .findById(id)

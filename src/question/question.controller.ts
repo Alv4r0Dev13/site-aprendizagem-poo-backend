@@ -46,6 +46,15 @@ export class QuestionController {
   }
 
   @Public()
+  @Get(':slug')
+  async findBySlug(@Param('slug') slug: string) {
+    const question = await this.questionService.findBySlug(slug);
+    if (!question)
+      throw new HttpException('Pergunta não encontrada.', HttpStatus.NOT_FOUND);
+    return question;
+  }
+
+  @Public()
   @Get(':id')
   async findById(@Param('id') id: string) {
     if (!isValidId(id))
