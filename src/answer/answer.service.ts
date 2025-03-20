@@ -93,4 +93,9 @@ export class AnswerService {
     const answers = await this.answerModel.findByIdAndDelete(id).exec();
     return filterData(answers);
   }
+
+  async removeByQuestion(question: string) {
+    const deleted = await this.answerModel.deleteMany({ question }).exec();
+    return deleted;
+  }
 }

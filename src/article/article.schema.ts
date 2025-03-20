@@ -11,6 +11,8 @@ export class Article {
   slug: string;
   @Prop({ required: true })
   content: string;
+  @Prop({ required: false })
+  images: string[];
   @Prop()
   createdAt: Date;
   @Prop()

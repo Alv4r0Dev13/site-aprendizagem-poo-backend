@@ -18,14 +18,20 @@ import { Accept, Public } from 'src/utils/security/Auth.decorator';
 import { UserType } from 'src/utils/enum/UserType.enum';
 import { isValidId } from 'src/utils/functions/isValidId.function';
 import { VoteAnswerDTO } from './dto/vote-answer.dto';
+import { QuestionService } from 'src/question/question.service';
+import { CommentService } from 'src/comment/comment.service';
 
 @Controller('answer')
 export class AnswerController {
-  constructor(private readonly answerService: AnswerService) {}
+  constructor(
+    private readonly answerService: AnswerService,
+    private readonly questionSerivce: QuestionService,
+    private readonly commentService: CommentService,
+  ) {}
 
   @Accept(UserType.ADMIN, UserType.STUDENT)
   @Post()
-  create(@Body() createAnswerDTO: CreateAnswerDTO) {
+  async create(@Body() createAnswerDTO: CreateAnswerDTO) {
     if (!isValidId(createAnswerDTO.author))
       throw new HttpException('Id do autor inválido.', HttpStatus.BAD_REQUEST);
     if (!isValidId(createAnswerDTO.question))
@@ -33,7 +39,13 @@ export class AnswerController {
         'Id da pergunta inválido.',
         HttpStatus.BAD_REQUEST,
       );
-    return this.answerService.create(createAnswerDTO);
+    const answer = await this.answerService.create(createAnswerDTO);
+    if (answer?.question) {
+      await this.questionSerivce.update(answer.question.toString(), {
+        $inc: { answers: 1 },
+      } as any);
+    }
+    return answer;
   }
 
   @Public()
@@ -120,6 +132,13 @@ export class AnswerController {
     const answer = await this.answerService.remove(id);
     if (!answer)
       throw new HttpException('Resposta não encontrada.', HttpStatus.NOT_FOUND);
+    await this.commentService.removeByContainer(
+      answer.question.toString(),
+      answer.id.toString(),
+    );
+    await this.questionSerivce.update(answer.question.toString(), {
+      $inc: { answers: -1 },
+    } as any);
     return answer;
   }
 }

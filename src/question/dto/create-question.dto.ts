@@ -6,6 +6,9 @@ export class CreateQuestionDTO {
   title: string;
   @IsString()
   @IsNotEmpty()
+  slug: string;
+  @IsString()
+  @IsNotEmpty()
   content: string;
   @IsString()
   @IsNotEmpty()

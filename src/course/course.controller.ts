@@ -62,6 +62,7 @@ export class CourseController {
   @Accept(UserType.ADMIN)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCourseDTO: UpdateCourseDTO) {
+    console.log(id);
     if (!isValidId(id))
       throw new HttpException('Id inválido.', HttpStatus.BAD_REQUEST);
     return this.courseService.update(id, updateCourseDTO);

@@ -15,6 +15,8 @@ export class Answer {
   upvotes: Types.ObjectId[];
   @Prop({ default: [] })
   downvotes: Types.ObjectId[];
+  @Prop({ default: 0 })
+  comments: number;
   @Prop()
   createdAt: Date;
   @Prop()

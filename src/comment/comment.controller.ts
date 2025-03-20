@@ -15,14 +15,32 @@ import { CreateCommentDTO } from './dto/create-comment.dto';
 import { UpdateCommentDTO } from './dto/update-comment.dto';
 import { isValidId } from 'src/utils/functions/isValidId.function';
 import { Public } from 'src/utils/security/Auth.decorator';
+import { QuestionService } from 'src/question/question.service';
+import { AnswerService } from 'src/answer/answer.service';
 
 @Controller('comment')
 export class CommentController {
-  constructor(private readonly commentService: CommentService) {}
+  constructor(
+    private readonly commentService: CommentService,
+    private readonly questionService: QuestionService,
+    private readonly answerService: AnswerService,
+  ) {}
 
   @Post()
-  create(@Body() createCommentDTO: CreateCommentDTO) {
-    return this.commentService.create(createCommentDTO);
+  async create(@Body() createCommentDTO: CreateCommentDTO) {
+    const comment = await this.commentService.create(createCommentDTO);
+    if (comment) {
+      if (comment.at?.answer) {
+        this.answerService.update(comment.at.answer.toString(), {
+          $inc: { comments: 1 },
+        } as any);
+      } else {
+        this.questionService.update(comment.at.question.toString(), {
+          $inc: { comments: 1 },
+        } as any);
+      }
+    }
+    return comment;
   }
 
   @Public()
@@ -87,6 +105,15 @@ export class CommentController {
         'Comentário não encontrado',
         HttpStatus.NOT_FOUND,
       );
+    if (comment.at?.answer) {
+      this.answerService.update(comment.at.answer.toString(), {
+        $inc: { comments: -1 },
+      } as any);
+    } else {
+      this.questionService.update(comment.at.question.toString(), {
+        $inc: { comments: -1 },
+      } as any);
+    }
     return comment;
   }
 }

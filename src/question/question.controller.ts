@@ -18,10 +18,16 @@ import { Accept, Public } from 'src/utils/security/Auth.decorator';
 import { UserType } from 'src/utils/enum/UserType.enum';
 import { isValidId } from 'src/utils/functions/isValidId.function';
 import { LikeQuestionDTO } from './dto/like-question.dto';
+import { AnswerService } from 'src/answer/answer.service';
+import { CommentService } from 'src/comment/comment.service';
 
 @Controller('question')
 export class QuestionController {
-  constructor(private readonly questionService: QuestionService) {}
+  constructor(
+    private readonly questionService: QuestionService,
+    private readonly answerService: AnswerService,
+    private readonly commentService: CommentService,
+  ) {}
 
   @Accept(UserType.STUDENT, UserType.ADMIN)
   @Post()
@@ -106,6 +112,8 @@ export class QuestionController {
     const question = await this.questionService.remove(id);
     if (!question)
       throw new HttpException('Pergunta não encontrada.', HttpStatus.NOT_FOUND);
+    await this.answerService.removeByQuestion(question.id.toString());
+    await this.commentService.removeByContainer(question.id.toString());
     return question;
   }
 }

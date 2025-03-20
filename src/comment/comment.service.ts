@@ -52,4 +52,13 @@ export class CommentService {
     const comment = await this.commentModel.findByIdAndDelete(id).exec();
     return filterData(comment);
   }
+
+  async removeByContainer(question: string, answer?: string) {
+    const deleted = await this.commentModel
+      .deleteMany({
+        at: { question, answer },
+      })
+      .exec();
+    return deleted;
+  }
 }
