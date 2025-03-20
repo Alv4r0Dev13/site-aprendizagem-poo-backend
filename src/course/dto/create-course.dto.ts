@@ -8,6 +8,10 @@ export class CreateCourseDTO {
 
   @IsString()
   @IsNotEmpty()
+  slug: string;
+
+  @IsString()
+  @IsNotEmpty()
   description: string;
 
   @IsEnum(CourseType)

@@ -13,7 +13,11 @@ export class CourseService {
   ) {}
 
   async create(data: CreateCourseDTO) {
-    const course = await this.courseModel.create(data);
+    const created = await this.courseModel.create(data);
+    const course = await created.populate({
+      path: 'author',
+      select: '_id username type avatarUrl',
+    });
     return filterData(course);
   }
 
@@ -45,6 +49,7 @@ export class CourseService {
   async update(id: string, data: UpdateCourseDTO) {
     const course = await this.courseModel
       .findByIdAndUpdate(id, data, { new: true })
+      .populate({ path: 'author', select: '_id username type avatarUrl' })
       .exec();
     return filterData(course);
   }
@@ -60,6 +65,7 @@ export class CourseService {
     console.log(update);
     const course = await this.courseModel
       .findByIdAndUpdate(query, update, { new: true })
+      .populate({ path: 'author', select: '_id username type avatarUrl' })
       .exec();
     return filterData(course);
   }

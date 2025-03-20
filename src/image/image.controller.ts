@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Query,
   UploadedFile,
   UploadedFiles,
   UseInterceptors,
@@ -22,14 +23,24 @@ export class ImageController {
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('image', { fileFilter }))
-  async upload(@UploadedFile() file: Express.Multer.File) {
+  async upload(
+    @UploadedFile() file: Express.Multer.File,
+    @Query('replace') replace?: string,
+  ) {
     if (!file)
       throw new HttpException(
         'Nenhuma imagem enviada.',
         HttpStatus.BAD_REQUEST,
       );
     try {
-      return await this.imageService.upload(file);
+      const newFile = await this.imageService.upload(file);
+      if (newFile) {
+        if (replace) {
+          const replaced = await this.imageService.destroy(replace);
+          console.log(replaced ? 'Replaced' : 'No');
+        }
+        return newFile;
+      }
     } catch (err) {
       console.log(err);
       throw new HttpException(
